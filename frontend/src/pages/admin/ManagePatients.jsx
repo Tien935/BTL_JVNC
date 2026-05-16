@@ -136,22 +136,37 @@ const ManagePatients = () => {
   };
 
   const getStatusLabel = (status) => {
-    switch(status) {
-      case 'PENDING': 
-      case 'Chờ xác nhận': return 'Chờ xác nhận';
-      case 'CONFIRMED': return 'Sắp tới';
-      case 'COMPLETED': return 'Đã khám';
-      case 'CANCELLED': return 'Đã hủy';
-      case 'CANCEL_REQUESTED': return 'Yêu cầu hủy';
-      default: return status || 'Chờ xác nhận';
+    switch (status) {
+      case "PENDING":
+      case "Chờ xác nhận":
+        return "Chờ xác nhận";
+      case "CONFIRMED":
+        return "Sắp tới";
+      case "COMPLETED":
+        return "Đã khám";
+      case "CANCELLED":
+        return "Đã hủy";
+      case "CANCEL_REQUESTED":
+        return "Yêu cầu hủy";
+      default:
+        return status || "Chờ xác nhận";
     }
   };
 
   const upcomingAppointments = appointments.filter(
-    (a) => a.status === "Sắp tới" || a.status === "Chờ xác nhận" || a.status === "PENDING" || a.status === "CONFIRMED",
+    (a) =>
+      a.status === "Sắp tới" ||
+      a.status === "Chờ xác nhận" ||
+      a.status === "PENDING" ||
+      a.status === "CONFIRMED",
   );
   const historyAppointments = appointments.filter(
-    (a) => a.status === "Đã khám" || a.status === "Đã hủy" || a.status === "COMPLETED" || a.status === "CANCELLED" || a.status === "CANCEL_REQUESTED",
+    (a) =>
+      a.status === "Đã khám" ||
+      a.status === "Đã hủy" ||
+      a.status === "COMPLETED" ||
+      a.status === "CANCELLED" ||
+      a.status === "CANCEL_REQUESTED",
   );
 
   const filteredPatients = patients.filter(
@@ -192,7 +207,7 @@ const ManagePatients = () => {
           </div>
           <button
             onClick={openAddPatientForm}
-            className="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-xl font-bold text-sm whitespace-nowrap flex items-center gap-2 transition shadow-sm h-full"
+            className="bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-6 rounded-full shadow-lg transition"
           >
             <i className="fas fa-plus"></i> Thêm bệnh nhân
           </button>
@@ -472,17 +487,19 @@ const ManagePatients = () => {
                                   {app.doctor?.name}
                                 </span>
                               </div>
-                              {(app.status === "Đã khám" || app.status === "COMPLETED") && app.notes && (
-                                <div className="bg-teal-50/50 p-4 rounded-xl border border-teal-100/50">
-                                  <h5 className="text-xs font-black text-teal-800 uppercase tracking-wider mb-2 flex items-center gap-2">
-                                    <i className="fas fa-notes-medical"></i> Kết
-                                    luận / Ghi chú
-                                  </h5>
-                                  <p className="text-sm text-slate-700 leading-relaxed">
-                                    {app.notes}
-                                  </p>
-                                </div>
-                              )}
+                              {(app.status === "Đã khám" ||
+                                app.status === "COMPLETED") &&
+                                app.notes && (
+                                  <div className="bg-teal-50/50 p-4 rounded-xl border border-teal-100/50">
+                                    <h5 className="text-xs font-black text-teal-800 uppercase tracking-wider mb-2 flex items-center gap-2">
+                                      <i className="fas fa-notes-medical"></i>{" "}
+                                      Kết luận / Ghi chú
+                                    </h5>
+                                    <p className="text-sm text-slate-700 leading-relaxed">
+                                      {app.notes}
+                                    </p>
+                                  </div>
+                                )}
                             </div>
                           </div>
                         ))}

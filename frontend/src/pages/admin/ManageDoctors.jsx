@@ -164,36 +164,30 @@ const ManageDoctors = () => {
             Danh sách đội ngũ y bác sĩ
           </p>
         </div>
-
-        <div className="flex flex-wrap items-center gap-4 w-full md:w-auto">
-          <div className="relative w-full md:w-64">
-            <input
-              type="text"
-              placeholder="Tìm tên, chuyên khoa, bằng cấp..."
-              className="w-full pl-10 pr-4 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-teal-500 transition-colors"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-            <i className="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+        <div flex gap-4 w-full md:w-auto>
+          <div className="flex flex-wrap items-center gap-4 w-full md:w-auto">
+            <div className="relative w-full md:w-64">
+              <input
+                type="text"
+                placeholder="Tìm tên, chuyên khoa, bằng cấp..."
+                className="w-full pl-10 pr-4 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-teal-500 transition-colors"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              <i className="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+            </div>
+            <div className="bg-teal-50 text-teal-600 px-4 py-2 rounded-xl font-bold text-sm whitespace-nowrap border border-teal-100">
+              Tổng: {filteredDoctors.length}
+            </div>
+            <button
+              onClick={handleAddNew}
+              className="bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-6 rounded-full shadow-lg transition"
+            >
+              <i className="fas fa-plus mr-2"></i> Thêm Bác sĩ
+            </button>
           </div>
-          <div className="bg-teal-50 text-teal-600 px-4 py-2 rounded-xl font-bold text-sm whitespace-nowrap border border-teal-100">
-            Tổng: {filteredDoctors.length}
-          </div>
-          <button
-            onClick={handleAddNew}
-            className="bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-6 rounded-xl shadow-sm transition flex items-center gap-2"
-          >
-            <i className="fas fa-plus"></i> Thêm Bác sĩ
-          </button>
         </div>
-        <button
-          onClick={handleAddNew}
-          className="bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-6 rounded-full shadow-lg transition"
-        >
-          <i className="fas fa-plus mr-2"></i> Thêm Bác sĩ
-        </button>
       </div>
-
       <div className="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
         {loading ? (
           <div className="p-10 text-center">
