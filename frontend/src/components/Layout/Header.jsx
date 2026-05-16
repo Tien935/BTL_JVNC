@@ -63,10 +63,10 @@ const Header = () => {
 
   const filteredDoctors = searchQuery.trim()
     ? mockDoctors.filter(
-        (d) =>
-          d.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          d.specialty.toLowerCase().includes(searchQuery.toLowerCase()),
-      )
+      (d) =>
+        d.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        d.specialty.toLowerCase().includes(searchQuery.toLowerCase()),
+    )
     : [];
 
   const handleSearchSelect = (doctor) => {
@@ -136,7 +136,7 @@ const Header = () => {
           >
             Lịch hẹn
           </Link>
-          {user?.role === 'ADMIN' && (
+          {user?.role === "ADMIN" && (
             <Link
               to="/admin"
               className={`hover:text-red-600 transition whitespace-nowrap font-bold ${isActive("/admin") ? "text-red-600" : ""}`}
@@ -202,7 +202,9 @@ const Header = () => {
           {user ? (
             <div className="flex items-center gap-3 bg-gray-50 p-1.5 pr-4 rounded-full border border-gray-100 hover:shadow-md transition cursor-pointer group relative">
               <div className="w-8 h-8 rounded-full bg-teal-600 flex items-center justify-center text-white font-bold text-sm">
-                {(user.fullName || user.username || "U").charAt(0).toUpperCase()}
+                {(user.fullName || user.username || "U")
+                  .charAt(0)
+                  .toUpperCase()}
               </div>
               <span className="text-sm font-bold text-gray-700 group-hover:text-teal-600 transition truncate max-w-[100px]">
                 {user.fullName || user.username}
@@ -217,13 +219,32 @@ const Header = () => {
                   <i className="far fa-id-card mr-2 text-teal-600"></i> Hồ sơ
                   của tôi
                 </Link>
-
-                {user?.role === 'ADMIN' && (
+                {user?.role === "ADMIN" && (
                   <Link
                     to="/admin"
                     className="block px-5 py-3 text-sm text-red-600 hover:bg-red-50 font-bold"
                   >
                     <i className="fas fa-user-shield mr-2"></i> Trang quản trị
+                  </Link>
+                )}
+
+                {user.role === "DOCTOR" && (
+                  <Link
+                    to="/doctor"
+                    className="block px-5 py-3 text-sm text-gray-700 hover:bg-teal-50 font-semibold"
+                  >
+                    <i className="fas fa-stethoscope mr-2 text-teal-600"></i>{" "}
+                    Portal Bác sĩ
+                  </Link>
+                )}
+
+                {user.role === "ADMIN" && (
+                  <Link
+                    to="/admin"
+                    className="block px-5 py-3 text-sm text-gray-700 hover:bg-teal-50 font-semibold"
+                  >
+                    <i className="fas fa-cog mr-2 text-teal-600"></i> Quản trị
+                    viên
                   </Link>
                 )}
 
