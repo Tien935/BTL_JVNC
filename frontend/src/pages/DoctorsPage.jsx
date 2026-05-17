@@ -120,7 +120,7 @@ const DoctorsPage = () => {
                     <img
                       src={doctor.imageUrl}
                       alt={doctor.name}
-                      className="w-full h-full object-cover group-hover:scale-110 transition duration-700"
+                      className="w-full h-full object-cover object-top group-hover:scale-110 transition duration-700"
                     />
                     <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-md px-4 py-2 rounded-full shadow-lg">
                       <span className="text-teal-600 font-black text-xs uppercase tracking-wider">

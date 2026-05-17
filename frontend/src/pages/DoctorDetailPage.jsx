@@ -88,7 +88,7 @@ const DoctorDetailPage = () => {
                 <img 
                   src={doctor.imageUrl} 
                   alt={doctor.name} 
-                  className="w-full aspect-[4/5] object-cover transition duration-700 group-hover:scale-105"
+                  className="w-full aspect-[4/5] object-cover object-top transition duration-700 group-hover:scale-105"
                 />
                 <div className="absolute top-4 right-4 bg-teal-500 text-white px-4 py-2 rounded-2xl shadow-xl font-black text-[10px] uppercase tracking-widest">
                   Chuyên gia y tế

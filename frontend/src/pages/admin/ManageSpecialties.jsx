@@ -5,6 +5,7 @@ const ManageSpecialties = () => {
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [editingSpecialty, setEditingSpecialty] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
   
   const [formData, setFormData] = useState({
     name: '',
@@ -87,54 +88,148 @@ const ManageSpecialties = () => {
     }
   };
 
+  const filteredSpecialties = specialties.filter(
+    (s) =>
+      s.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      s.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      String(s.id).includes(searchTerm)
+  );
+
   return (
     <div className="space-y-6 animate-fadeIn">
-      <div className="flex justify-between items-center bg-white p-6 rounded-3xl shadow-sm border border-slate-100">
+      <div className="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h2 className="text-2xl font-black text-slate-800">Quản lý Chuyên khoa</h2>
-          <p className="text-slate-500 font-semibold mt-1">Tổng số: {specialties.length} chuyên khoa</p>
+          <h2 className="text-2xl font-black text-slate-800">
+            Quản lý Chuyên khoa
+          </h2>
+          <p className="text-slate-500 font-semibold mt-1">
+            Danh sách các chuyên khoa trên hệ thống
+          </p>
         </div>
-        <button 
-          onClick={handleAddNew}
-          className="bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-6 rounded-full shadow-lg transition"
-        >
-          <i className="fas fa-plus mr-2"></i> Thêm Chuyên khoa
-        </button>
+
+        <div className="flex gap-4 w-full md:w-auto">
+          <div className="relative w-full md:w-64">
+            <input
+              type="text"
+              placeholder="Tìm kiếm chuyên khoa..."
+              className="w-full pl-10 pr-4 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-teal-500 transition-colors"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <i className="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+          </div>
+          <div className="bg-teal-50 text-teal-600 px-4 py-2 rounded-xl font-bold text-sm whitespace-nowrap flex items-center h-full border border-teal-100">
+            Tổng: {filteredSpecialties.length}
+          </div>
+          <button
+            onClick={handleAddNew}
+            className="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-xl font-bold text-sm whitespace-nowrap flex items-center gap-2 transition shadow-sm h-full"
+          >
+            <i className="fas fa-plus"></i> Thêm chuyên khoa
+          </button>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
         {loading ? (
-          <div className="col-span-full p-10 text-center">
+          <div className="p-10 text-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-600 mx-auto"></div>
           </div>
         ) : (
-          specialties.map(specialty => (
-            <div key={specialty.id} className="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden group hover:shadow-xl transition-all duration-300">
-              <div className="relative h-48 overflow-hidden">
-                <img 
-                  src={specialty.imageUrl || 'https://images.unsplash.com/photo-1505751172876-fa1923c5c528?auto=format&fit=crop&w=800&q=80'} 
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                  alt={specialty.name}
-                />
-                <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <button onClick={() => handleEdit(specialty)} className="w-10 h-10 rounded-xl bg-white/90 backdrop-blur shadow-lg text-blue-600 flex items-center justify-center hover:bg-blue-600 hover:text-white transition">
-                    <i className="fas fa-edit"></i>
-                  </button>
-                  <button onClick={() => handleDelete(specialty.id)} className="w-10 h-10 rounded-xl bg-white/90 backdrop-blur shadow-lg text-red-600 flex items-center justify-center hover:bg-red-600 hover:text-white transition">
-                    <i className="fas fa-trash"></i>
-                  </button>
-                </div>
-              </div>
-              <div className="p-6">
-                <h3 className="text-xl font-black text-slate-800 mb-2">{specialty.name}</h3>
-                <p className="text-slate-500 text-sm font-semibold line-clamp-3 mb-4">{specialty.description}</p>
-                <div className="pt-4 border-t border-slate-50 flex justify-between items-center text-xs font-bold text-slate-400 uppercase tracking-widest">
-                  <span>ID: #{specialty.id}</span>
-                  <span className="text-teal-600 bg-teal-50 px-3 py-1 rounded-full">Hoạt động</span>
-                </div>
-              </div>
-            </div>
-          ))
+          <div className="overflow-x-auto">
+            <table className="w-full text-left">
+              <thead>
+                <tr className="bg-slate-50 border-b border-slate-100">
+                  <th className="px-6 py-4 font-bold text-slate-400 uppercase text-xs tracking-wider">
+                    ID
+                  </th>
+                  <th className="px-6 py-4 font-bold text-slate-400 uppercase text-xs tracking-wider">
+                    Chuyên khoa
+                  </th>
+                  <th className="px-6 py-4 font-bold text-slate-400 uppercase text-xs tracking-wider">
+                    Mô tả
+                  </th>
+                  <th className="px-6 py-4 font-bold text-slate-400 uppercase text-xs tracking-wider">
+                    Trạng thái
+                  </th>
+                  <th className="px-6 py-4 font-bold text-slate-400 uppercase text-xs tracking-wider text-right">
+                    Thao tác
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {filteredSpecialties.length > 0 ? (
+                  filteredSpecialties.map((specialty) => (
+                    <tr
+                      key={specialty.id}
+                      className="hover:bg-slate-50 transition group"
+                    >
+                      <td className="px-6 py-4">
+                        <span className="px-3 py-1 bg-slate-100 text-slate-700 rounded-lg font-mono text-sm font-bold border border-slate-200 shadow-sm">
+                          CK-{String(specialty.id).padStart(3, "0")}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex items-center gap-4">
+                          <div className="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center text-slate-400 font-bold text-xl overflow-hidden shadow-sm">
+                            {specialty.imageUrl ? (
+                              <img
+                                src={specialty.imageUrl}
+                                className="w-full h-full object-cover"
+                                alt=""
+                              />
+                            ) : (
+                              <i className="fas fa-stethoscope text-teal-500"></i>
+                            )}
+                          </div>
+                          <div>
+                            <p className="font-bold text-slate-800 text-base">
+                              {specialty.name || "Chưa cập nhật"}
+                            </p>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <p className="text-sm font-medium text-slate-500 line-clamp-2 max-w-xs">
+                          {specialty.description || "Chưa có mô tả"}
+                        </p>
+                      </td>
+                      <td className="px-6 py-4">
+                        <span className="px-3 py-1 rounded-full text-xs font-black uppercase tracking-widest bg-teal-100 text-teal-600">
+                          Hoạt động
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-right whitespace-nowrap">
+                        <button
+                          onClick={() => handleEdit(specialty)}
+                          className="w-10 h-10 rounded-xl bg-slate-50 text-slate-600 hover:bg-blue-600 hover:text-white transition shadow-sm inline-flex items-center justify-center mr-2"
+                          title="Sửa thông tin"
+                        >
+                          <i className="fas fa-edit"></i>
+                        </button>
+                        <button
+                          onClick={() => handleDelete(specialty.id)}
+                          className="w-10 h-10 rounded-xl bg-slate-50 text-slate-600 hover:bg-red-600 hover:text-white transition shadow-sm inline-flex items-center justify-center"
+                          title="Xóa chuyên khoa"
+                        >
+                          <i className="fas fa-trash"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td
+                      colSpan="5"
+                      className="px-6 py-8 text-center text-slate-500 font-medium"
+                    >
+                      Không tìm thấy chuyên khoa nào phù hợp.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
 
