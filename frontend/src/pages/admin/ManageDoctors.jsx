@@ -117,11 +117,11 @@ const ManageDoctors = () => {
       ...(editingDoctor
         ? {}
         : {
-            user: {
-              username: formData.username,
-              password: formData.password,
-            },
-          }),
+          user: {
+            username: formData.username,
+            password: formData.password,
+          },
+        }),
     };
 
     try {
@@ -146,14 +146,24 @@ const ManageDoctors = () => {
     }
   };
 
-  const filteredDoctors = doctors.filter(
-    (doctor) =>
-      doctor.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      doctor.specialty?.name
-        ?.toLowerCase()
-        .includes(searchTerm.toLowerCase()) ||
-      doctor.degree?.toLowerCase().includes(searchTerm.toLowerCase()),
-  );
+  const removeAccents = (str) => {
+    if (!str) return "";
+    return str
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/đ/g, "d")
+      .replace(/Đ/g, "D")
+      .toLowerCase();
+  };
+
+  const filteredDoctors = doctors.filter((doctor) => {
+    const search = removeAccents(searchTerm);
+    return (
+      removeAccents(doctor.name).includes(search) ||
+      removeAccents(doctor.specialty?.name).includes(search) ||
+      removeAccents(doctor.degree).includes(search)
+    );
+  });
 
   return (
     <div className="space-y-6 animate-fadeIn">
@@ -186,12 +196,6 @@ const ManageDoctors = () => {
             <i className="fas fa-plus"></i> Thêm Bác sĩ
           </button>
         </div>
-        <button
-          onClick={handleAddNew}
-          className="bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-6 rounded-full shadow-lg transition"
-        >
-          <i className="fas fa-plus mr-2"></i> Thêm Bác sĩ
-        </button>
       </div>
 
       <div className="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
@@ -239,7 +243,7 @@ const ManageDoctors = () => {
                               "/frontend/assets/images/doctors/default.jpg"
                             }
                             alt=""
-                            className="w-10 h-10 rounded-full object-cover border border-slate-200"
+                            className="w-10 h-10 rounded-full object-cover object-top border border-slate-200"
                           />
                           <div>
                             <p className="font-bold text-slate-800">

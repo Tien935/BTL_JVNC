@@ -136,8 +136,8 @@ const ManagePatients = () => {
   };
 
   const getStatusLabel = (status) => {
-    switch(status) {
-      case 'PENDING': 
+    switch (status) {
+      case 'PENDING':
       case 'Chờ xác nhận': return 'Chờ xác nhận';
       case 'CONFIRMED': return 'Sắp tới';
       case 'COMPLETED': return 'Đã khám';
@@ -154,15 +154,25 @@ const ManagePatients = () => {
     (a) => a.status === "Đã khám" || a.status === "Đã hủy" || a.status === "COMPLETED" || a.status === "CANCELLED" || a.status === "CANCEL_REQUESTED",
   );
 
-  const filteredPatients = patients.filter(
-    (patient) =>
-      patient.fullName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      patient.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      patient.phone?.includes(searchTerm) ||
-      formatPatientId(patient.id)
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase()),
-  );
+  const removeAccents = (str) => {
+    if (!str) return "";
+    return str
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/đ/g, "d")
+      .replace(/Đ/g, "D")
+      .toLowerCase();
+  };
+
+  const filteredPatients = patients.filter((patient) => {
+    const search = removeAccents(searchTerm);
+    return (
+      removeAccents(patient.fullName).includes(search) ||
+      removeAccents(patient.email).includes(search) ||
+      removeAccents(patient.phone).includes(search) ||
+      removeAccents(formatPatientId(patient.id)).includes(search)
+    );
+  });
 
   return (
     <div className="space-y-6 animate-fadeIn">
@@ -392,9 +402,9 @@ const ManagePatients = () => {
                                 <span className="text-xs font-bold uppercase">
                                   {app.date
                                     ? new Date(app.date).toLocaleDateString(
-                                        "vi-VN",
-                                        { month: "short" },
-                                      )
+                                      "vi-VN",
+                                      { month: "short" },
+                                    )
                                     : ""}
                                 </span>
                                 <span className="text-xl font-black leading-none">
