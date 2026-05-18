@@ -1,16 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 
 const ManageSpecialties = () => {
   const [specialties, setSpecialties] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [editingSpecialty, setEditingSpecialty] = useState(null);
-  const [searchTerm, setSearchTerm] = useState('');
-  
+  const [searchTerm, setSearchTerm] = useState("");
   const [formData, setFormData] = useState({
-    name: '',
-    description: '',
-    imageUrl: ''
+    name: "",
+    description: "",
+    imageUrl: "",
   });
 
   useEffect(() => {
@@ -20,7 +19,7 @@ const ManageSpecialties = () => {
   const fetchSpecialties = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:8081/api/specialties');
+      const response = await fetch("http://localhost:8081/api/specialties");
       if (response.ok) {
         const data = await response.json();
         setSpecialties(data);
@@ -35,7 +34,10 @@ const ManageSpecialties = () => {
   const handleDelete = async (id) => {
     if (window.confirm("Bạn có chắc muốn xóa chuyên khoa này?")) {
       try {
-        const response = await fetch(`http://localhost:8081/api/specialties/${id}`, { method: 'DELETE' });
+        const response = await fetch(
+          `http://localhost:8081/api/specialties/${id}`,
+          { method: "DELETE" },
+        );
         if (response.ok) {
           fetchSpecialties();
         } else {
@@ -52,29 +54,29 @@ const ManageSpecialties = () => {
     setFormData({
       name: specialty.name,
       description: specialty.description,
-      imageUrl: specialty.imageUrl
+      imageUrl: specialty.imageUrl,
     });
     setShowModal(true);
   };
 
   const handleAddNew = () => {
     setEditingSpecialty(null);
-    setFormData({ name: '', description: '', imageUrl: '' });
+    setFormData({ name: "", description: "", imageUrl: "" });
     setShowModal(true);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const url = editingSpecialty 
-      ? `http://localhost:8081/api/specialties/${editingSpecialty.id}` 
+    const url = editingSpecialty
+      ? `http://localhost:8081/api/specialties/${editingSpecialty.id}`
       : `http://localhost:8081/api/specialties`;
-    const method = editingSpecialty ? 'PUT' : 'POST';
+    const method = editingSpecialty ? "PUT" : "POST";
 
     try {
       const response = await fetch(url, {
         method,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
       });
       if (response.ok) {
         setShowModal(false);
@@ -89,15 +91,14 @@ const ManageSpecialties = () => {
   };
 
   const filteredSpecialties = specialties.filter(
-    (s) =>
-      s.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      s.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      String(s.id).includes(searchTerm)
+    (specialty) =>
+      specialty.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      specialty.description?.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   return (
     <div className="space-y-6 animate-fadeIn">
-      <div className="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-white p-6 rounded-3xl shadow-sm border border-slate-100 gap-4">
         <div>
           <h2 className="text-2xl font-black text-slate-800">
             Quản lý Chuyên khoa
@@ -238,34 +239,76 @@ const ManageSpecialties = () => {
           <div className="bg-white rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden">
             <div className="p-6 border-b border-slate-100 flex justify-between items-center">
               <h3 className="text-xl font-bold text-slate-800">
-                {editingSpecialty ? 'Chỉnh sửa Chuyên khoa' : 'Thêm Chuyên khoa mới'}
+                {editingSpecialty
+                  ? "Chỉnh sửa Chuyên khoa"
+                  : "Thêm Chuyên khoa mới"}
               </h3>
-              <button onClick={() => setShowModal(false)} className="text-slate-400 hover:text-slate-600">
+              <button
+                onClick={() => setShowModal(false)}
+                className="text-slate-400 hover:text-slate-600"
+              >
                 <i className="fas fa-times text-xl"></i>
               </button>
             </div>
-            
+
             <form onSubmit={handleSubmit} className="p-6 space-y-4">
               <div>
-                <label className="block text-sm font-bold text-slate-600 mb-1">Tên chuyên khoa *</label>
-                <input required type="text" className="w-full p-3 rounded-xl border border-slate-200 focus:border-teal-500 outline-none" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} />
+                <label className="block text-sm font-bold text-slate-600 mb-1">
+                  Tên chuyên khoa *
+                </label>
+                <input
+                  required
+                  type="text"
+                  className="w-full p-3 rounded-xl border border-slate-200 focus:border-teal-500 outline-none"
+                  value={formData.name}
+                  onChange={(e) =>
+                    setFormData({ ...formData, name: e.target.value })
+                  }
+                />
               </div>
-              
+
               <div>
-                <label className="block text-sm font-bold text-slate-600 mb-1">URL Hình ảnh</label>
-                <input type="text" placeholder="https://..." className="w-full p-3 rounded-xl border border-slate-200 focus:border-teal-500 outline-none" value={formData.imageUrl} onChange={e => setFormData({...formData, imageUrl: e.target.value})} />
+                <label className="block text-sm font-bold text-slate-600 mb-1">
+                  URL Hình ảnh
+                </label>
+                <input
+                  type="text"
+                  placeholder="https://..."
+                  className="w-full p-3 rounded-xl border border-slate-200 focus:border-teal-500 outline-none"
+                  value={formData.imageUrl}
+                  onChange={(e) =>
+                    setFormData({ ...formData, imageUrl: e.target.value })
+                  }
+                />
               </div>
-              
+
               <div>
-                <label className="block text-sm font-bold text-slate-600 mb-1">Mô tả</label>
-                <textarea rows="4" required className="w-full p-3 rounded-xl border border-slate-200 focus:border-teal-500 outline-none resize-none" value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})}></textarea>
+                <label className="block text-sm font-bold text-slate-600 mb-1">
+                  Mô tả
+                </label>
+                <textarea
+                  rows="4"
+                  required
+                  className="w-full p-3 rounded-xl border border-slate-200 focus:border-teal-500 outline-none resize-none"
+                  value={formData.description}
+                  onChange={(e) =>
+                    setFormData({ ...formData, description: e.target.value })
+                  }
+                ></textarea>
               </div>
 
               <div className="pt-4 flex justify-end gap-3">
-                <button type="button" onClick={() => setShowModal(false)} className="px-6 py-2.5 rounded-full font-bold text-slate-600 hover:bg-slate-100 transition">
+                <button
+                  type="button"
+                  onClick={() => setShowModal(false)}
+                  className="px-6 py-2.5 rounded-full font-bold text-slate-600 hover:bg-slate-100 transition"
+                >
                   Hủy
                 </button>
-                <button type="submit" className="px-6 py-2.5 rounded-full font-bold text-white bg-teal-600 hover:bg-teal-700 shadow-lg transition">
+                <button
+                  type="submit"
+                  className="px-6 py-2.5 rounded-full font-bold text-white bg-teal-600 hover:bg-teal-700 shadow-lg transition"
+                >
                   Lưu lại
                 </button>
               </div>

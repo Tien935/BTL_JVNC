@@ -117,11 +117,11 @@ const ManageDoctors = () => {
       ...(editingDoctor
         ? {}
         : {
-          user: {
-            username: formData.username,
-            password: formData.password,
-          },
-        }),
+            user: {
+              username: formData.username,
+              password: formData.password,
+            },
+          }),
     };
 
     try {
@@ -191,7 +191,7 @@ const ManageDoctors = () => {
             </div>
             <button
               onClick={handleAddNew}
-              className="bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-6 rounded-full shadow-lg transition"
+              className="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-xl font-bold text-sm whitespace-nowrap flex items-center transition shadow-sm h-full"
             >
               <i className="fas fa-plus mr-2"></i> Thêm Bác sĩ
             </button>
@@ -264,7 +264,7 @@ const ManageDoctors = () => {
                       <td className="px-6 py-4 text-right">
                         <button
                           onClick={() => handleEdit(doctor)}
-                          className="w-8 h-8 rounded-lg bg-blue-50 text-blue-500 hover:bg-blue-100 transition mr-2"
+                          className="w-8 h-8 rounded-lg bg-blue-50 text-teal-600 hover:bg-blue-100 transition mr-2"
                         >
                           <i className="fas fa-edit"></i>
                         </button>

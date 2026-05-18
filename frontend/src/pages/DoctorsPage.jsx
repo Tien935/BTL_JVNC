@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 
 const DoctorsPage = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedSpecialty, setSelectedSpecialty] = useState("Tất cả");
-
+  const location = useLocation();
   const [doctors, setDoctors] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -18,6 +18,13 @@ const DoctorsPage = () => {
     "Da liễu",
     "Răng Hàm Mặt",
   ];
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const search = params.get("search");
+    if (search) {
+      setSearchTerm(search);
+    }
+  }, [location.search]);
 
   useEffect(() => {
     fetchDoctors();
@@ -41,12 +48,18 @@ const DoctorsPage = () => {
   };
 
   const filteredDoctors = doctors.filter((doctor) => {
-    return doctor.name.toLowerCase().includes(searchTerm.toLowerCase());
+    return (
+      doctor.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      doctor.specialty?.name
+        ?.toLowerCase()
+        .includes(searchTerm.toLowerCase()) ||
+      doctor.degree?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
   });
 
   const handleBooking = (doctor) => {
     navigate("/booking", {
-      state: { doctor, specialty: { name: doctor.specialty?.name || '' } },
+      state: { doctor, specialty: { name: doctor.specialty?.name || "" } },
     });
   };
 
@@ -68,7 +81,7 @@ const DoctorsPage = () => {
           </p>
         </div>
       </section>
-      
+
       {/* Filter Section */}
       <div className="container mx-auto px-4 -mt-10 relative z-20">
         <div className="bg-white p-6 rounded-[2rem] shadow-xl border border-gray-100 flex flex-col md:flex-row gap-6">
@@ -103,7 +116,9 @@ const DoctorsPage = () => {
         {loading ? (
           <div className="text-center py-20">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600 mx-auto mb-4"></div>
-            <p className="text-gray-500 font-semibold">Đang tải danh sách bác sĩ...</p>
+            <p className="text-gray-500 font-semibold">
+              Đang tải danh sách bác sĩ...
+            </p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
@@ -113,7 +128,7 @@ const DoctorsPage = () => {
                   key={doctor.id}
                   className="bg-white rounded-[2.5rem] overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 border border-gray-100 group flex flex-col"
                 >
-                  <Link 
+                  <Link
                     to={`/doctors/${doctor.id}`}
                     className="h-72 overflow-hidden relative block"
                   >
@@ -148,7 +163,7 @@ const DoctorsPage = () => {
                       </p>
                     </div>
                     <div className="flex gap-4">
-                       <Link 
+                      <Link
                         to={`/doctors/${doctor.id}`}
                         className="flex-1 bg-white text-slate-900 border-2 border-slate-100 font-black py-4 rounded-2xl hover:bg-slate-50 transition-all text-center text-xs uppercase tracking-widest flex items-center justify-center"
                       >
