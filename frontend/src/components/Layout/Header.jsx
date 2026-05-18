@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Logo from "../../assets/Logo.png";
 
@@ -27,46 +27,33 @@ const Header = () => {
     navigate("/");
   };
 
-  const mockDoctors = [
-    {
-      id: 1,
-      name: "BS. Nguyễn Văn An",
-      specialty: "Nội tổng quát",
-      degree: "Thạc sĩ, Bác sĩ",
-    },
-    {
-      id: 2,
-      name: "ThS.BS. Trần Thị Bình",
-      specialty: "Nhi khoa",
-      degree: "Thạc sĩ",
-    },
-    {
-      id: 3,
-      name: "BSCKII. Lê Văn Cường",
-      specialty: "Tim mạch",
-      degree: "Bác sĩ chuyên khoa II",
-    },
-    {
-      id: 4,
-      name: "BS. Phạm Minh Đức",
-      specialty: "Sản phụ khoa",
-      degree: "Bác sĩ chuyên khoa I",
-    },
-    { id: 5, name: "BS. Hoàng Thu Hà", specialty: "Da liễu", degree: "Bác sĩ" },
-    {
-      id: 6,
-      name: "ThS.BS. Đỗ Kim Liên",
-      specialty: "Răng Hàm Mặt",
-      degree: "Thạc sĩ",
-    },
-  ];
+  const [doctors, setDoctors] = useState([]);
+
+  useEffect(() => {
+    fetch("http://localhost:8081/api/doctors")
+      .then((res) => res.json())
+      .then((data) => setDoctors(data))
+      .catch((err) => console.error("Error fetching doctors for header:", err));
+  }, []);
+
+  const removeAccents = (str) => {
+    if (!str) return "";
+    return str
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/đ/g, "d")
+      .replace(/Đ/g, "D")
+      .toLowerCase();
+  };
 
   const filteredDoctors = searchQuery.trim()
-    ? mockDoctors.filter(
-        (d) =>
-          d.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          d.specialty.toLowerCase().includes(searchQuery.toLowerCase()),
-      )
+    ? doctors.filter((d) => {
+      const search = removeAccents(searchQuery.trim());
+      return (
+        removeAccents(d.name).includes(search) ||
+        removeAccents(d.specialty?.name).includes(search)
+      );
+    })
     : [];
 
   const handleSearchSelect = (doctor) => {
@@ -183,7 +170,7 @@ const Header = () => {
                         {doctor.name}
                       </p>
                       <p className="text-xs text-gray-400 font-bold">
-                        {doctor.specialty}
+                        {doctor.specialty?.name}
                       </p>
                     </div>
                   </button>

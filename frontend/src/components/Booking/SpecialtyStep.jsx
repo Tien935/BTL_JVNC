@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 
 const iconColorMap = {
-  1: { icon: 'fa-user-nurse', color: 'bg-blue-50 text-blue-600' },
-  2: { icon: 'fa-baby', color: 'bg-pink-50 text-pink-600' },
-  3: { icon: 'fa-heartbeat', color: 'bg-red-50 text-red-600' },
-  4: { icon: 'fa-female', color: 'bg-purple-50 text-purple-600' },
-  5: { icon: 'fa-hand-dots', color: 'bg-orange-50 text-orange-600' },
-  6: { icon: 'fa-tooth', color: 'bg-teal-50 text-teal-600' },
-  7: { icon: 'fa-ear-listen', color: 'bg-indigo-50 text-indigo-600' },
-  8: { icon: 'fa-bone', color: 'bg-amber-50 text-amber-600' },
+  1: { icon: 'stethoscope', color: 'bg-blue-50 text-blue-600' },
+  2: { icon: 'child_care', color: 'bg-pink-50 text-pink-600' },
+  3: { icon: 'cardiology', color: 'bg-red-50 text-red-600' },
+  4: { icon: 'pregnant_woman', color: 'bg-purple-50 text-purple-600' },
+  5: { icon: 'dermatology', color: 'bg-orange-50 text-orange-600' },
+  6: { icon: 'dentistry', color: 'bg-teal-50 text-teal-600' },
+  7: { icon: 'ear_sound', color: 'bg-indigo-50 text-indigo-600' },
+  8: { icon: 'orthopedics', color: 'bg-amber-50 text-amber-600' },
 };
 
 const SpecialtyStep = ({ onSelect }) => {
@@ -21,7 +21,7 @@ const SpecialtyStep = ({ onSelect }) => {
       .then(data => {
         const mappedData = data.map(item => ({
           ...item,
-          icon: iconColorMap[item.id]?.icon || 'fa-stethoscope',
+          icon: iconColorMap[item.id]?.icon || 'medical_services',
           color: iconColorMap[item.id]?.color || 'bg-slate-50 text-slate-600'
         }));
         setSpecialties(mappedData);
@@ -50,7 +50,7 @@ const SpecialtyStep = ({ onSelect }) => {
           className="group bg-white p-8 rounded-3xl border border-slate-100 shadow-sm hover:shadow-2xl hover:border-teal-500 transition-all duration-300 text-center flex flex-col items-center"
         >
           <div className={`w-20 h-20 ${item.color} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
-            <i className={`fas ${item.icon} text-3xl`}></i>
+            <span className="material-symbols-outlined text-3xl">{item.icon}</span>
           </div>
           <h3 className="font-bold text-lg text-slate-800 group-hover:text-teal-700">{item.name}</h3>
           <p className="text-slate-400 text-sm mt-2">{item.description || 'Khám chuyên khoa'}</p>

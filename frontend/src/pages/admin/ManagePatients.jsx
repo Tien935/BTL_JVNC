@@ -169,15 +169,25 @@ const ManagePatients = () => {
       a.status === "CANCEL_REQUESTED",
   );
 
-  const filteredPatients = patients.filter(
-    (patient) =>
-      patient.fullName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      patient.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      patient.phone?.includes(searchTerm) ||
-      formatPatientId(patient.id)
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase()),
-  );
+  const removeAccents = (str) => {
+    if (!str) return "";
+    return str
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/đ/g, "d")
+      .replace(/Đ/g, "D")
+      .toLowerCase();
+  };
+
+  const filteredPatients = patients.filter((patient) => {
+    const search = removeAccents(searchTerm);
+    return (
+      removeAccents(patient.fullName).includes(search) ||
+      removeAccents(patient.email).includes(search) ||
+      removeAccents(patient.phone).includes(search) ||
+      removeAccents(formatPatientId(patient.id)).includes(search)
+    );
+  });
 
   return (
     <div className="space-y-6 animate-fadeIn">

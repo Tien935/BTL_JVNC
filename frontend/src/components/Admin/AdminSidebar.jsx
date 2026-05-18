@@ -45,10 +45,9 @@ const AdminSidebar = () => {
             key={item.path}
             to={item.path}
             className={`flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-300 font-semibold
-              ${
-                isActive(item.path)
-                  ? "bg-teal-600 text-white shadow-lg shadow-teal-900/50"
-                  : "text-slate-400 hover:bg-slate-800 hover:text-white"
+              ${isActive(item.path)
+                ? "bg-teal-600 text-white shadow-lg shadow-teal-900/50"
+                : "text-slate-400 hover:bg-slate-800 hover:text-white"
               }`}
           >
             <i className={`${item.icon} w-5 text-center`}></i>

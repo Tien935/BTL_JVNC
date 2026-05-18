@@ -198,13 +198,12 @@ const ManageUsers = () => {
                       </td>
                       <td className="px-6 py-4">
                         <span
-                          className={`px-3 py-1 rounded-full text-xs font-black uppercase tracking-widest ${
-                            user.role === "ADMIN"
+                          className={`px-3 py-1 rounded-full text-xs font-black uppercase tracking-widest ${user.role === "ADMIN"
                               ? "bg-purple-100 text-purple-600"
                               : user.role === "DOCTOR"
                                 ? "bg-blue-100 text-blue-600"
                                 : "bg-teal-100 text-teal-600"
-                          }`}
+                            }`}
                         >
                           {user.role}
                         </span>

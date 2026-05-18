@@ -6,7 +6,7 @@ const DoctorStep = ({ specialty, onSelect, onBack }) => {
 
   useEffect(() => {
     if (!specialty?.name) return;
-    
+
     fetch(`http://localhost:8081/api/doctors?specialty=${encodeURIComponent(specialty.name)}`)
       .then(res => res.json())
       .then(data => {
@@ -31,7 +31,7 @@ const DoctorStep = ({ specialty, onSelect, onBack }) => {
   return (
     <div className="animate-fadeIn">
       <div className="flex items-center mb-8">
-        <button 
+        <button
           onClick={onBack}
           className="mr-4 text-slate-500 hover:text-teal-600 flex items-center gap-2 font-semibold transition"
         >
@@ -57,14 +57,14 @@ const DoctorStep = ({ specialty, onSelect, onBack }) => {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {doctors.map((doctor) => (
-            <div 
+            <div
               key={doctor.id}
               className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-300 flex gap-6 items-center"
             >
-              <img 
-                src={doctor.image} 
-                alt={doctor.name} 
-                className="w-24 h-24 rounded-2xl object-cover ring-4 ring-teal-50"
+              <img
+                src={doctor.image}
+                alt={doctor.name}
+                className="w-24 h-24 rounded-2xl object-cover object-top ring-4 ring-teal-50"
               />
               <div className="flex-grow">
                 <h3 className="font-bold text-xl text-slate-900 mb-1">{doctor.name}</h3>
@@ -78,7 +78,7 @@ const DoctorStep = ({ specialty, onSelect, onBack }) => {
                   </span>
                 </div>
               </div>
-              <button 
+              <button
                 onClick={() => onSelect(doctor)}
                 className="bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-6 rounded-2xl transition shadow-md whitespace-nowrap"
               >

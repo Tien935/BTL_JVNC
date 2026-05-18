@@ -113,7 +113,7 @@ const Blog = () => {
           >
             <div className="h-56 overflow-hidden">
               <img
-                src="/frontend/assets/images/TANTTV.png"
+                src="https://cdn.tuoitrethudo.vn/stores/news_dataimages/2022/112022/24/13/345620221124133059.jpg?rt=20221124133134"
                 className="w-full h-full object-cover group-hover:scale-110 transition duration-700"
                 alt="Blog 4"
               />
