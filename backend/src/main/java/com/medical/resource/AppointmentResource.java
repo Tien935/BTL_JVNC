@@ -22,8 +22,7 @@ public class AppointmentResource {
 
     @GET
     public List<Appointment> getAll() {
-        // In a real app, we would filter by the logged-in user
-        return Appointment.listAll();
+        return Appointment.list("order by date desc, time desc");
     }
 
     @GET
@@ -35,7 +34,7 @@ public class AppointmentResource {
     @GET
     @Path("/patient/{patientId}")
     public List<Appointment> getByPatientId(@PathParam("patientId") Long patientId) {
-        return Appointment.list("patient.id", patientId);
+        return Appointment.list("patient.id = ?1 order by date desc, time desc", patientId);
     }
 
     @POST
@@ -43,6 +42,17 @@ public class AppointmentResource {
     public Response create(Appointment appointment) {
         if (appointment.id == null) {
             appointment.id = "PK-" + (1000 + new Random().nextInt(9000));
+        }
+
+        // Check for double booking
+        if (appointment.doctor != null && appointment.doctor.id != null && appointment.date != null && appointment.time != null) {
+            long overlapping = Appointment.find("doctor.id = ?1 and date = ?2 and time = ?3 and status != 'Đã hủy' and status != 'CANCELLED' and status != 'CANCEL_REQUESTED'", 
+                    appointment.doctor.id, appointment.date, appointment.time).count();
+            if (overlapping > 0) {
+                return Response.status(Response.Status.CONFLICT)
+                        .entity("{\"error\": \"Bác sĩ đã có lịch hẹn vào thời gian này. Vui lòng chọn thời gian khác.\"}")
+                        .build();
+            }
         }
 
         // Ensure patient and doctor exist (basic check)

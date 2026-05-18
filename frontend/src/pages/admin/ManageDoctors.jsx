@@ -156,6 +156,10 @@ const ManageDoctors = () => {
       .toLowerCase();
   };
 
+  const formatDoctorId = (id) => {
+    return `BS-${String(id).padStart(4, "0")}`;
+  };
+
   const filteredDoctors = doctors.filter((doctor) => {
     const search = removeAccents(searchTerm);
     return (
@@ -232,8 +236,10 @@ const ManageDoctors = () => {
                       key={doctor.id}
                       className="hover:bg-slate-50 transition"
                     >
-                      <td className="px-6 py-4 font-mono font-bold text-slate-500">
-                        #{doctor.id}
+                      <td className="px-6 py-4">
+                        <span className="px-3 py-1 bg-slate-100 text-slate-700 rounded-lg font-mono text-sm font-bold border border-slate-200 shadow-sm">
+                          {formatDoctorId(doctor.id)}
+                        </span>
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-3">

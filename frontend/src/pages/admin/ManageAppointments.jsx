@@ -52,6 +52,14 @@ const ManageAppointments = () => {
     }
   };
 
+  const formatPatientId = (id) => {
+    return `BN-${String(id).padStart(4, "0")}`;
+  };
+
+  const formatDoctorId = (id) => {
+    return `BS-${String(id).padStart(4, "0")}`;
+  };
+
   return (
     <div className="space-y-6 animate-fadeIn">
       <div className="flex justify-between items-center bg-white p-6 rounded-3xl shadow-sm border border-slate-100">
@@ -82,13 +90,24 @@ const ManageAppointments = () => {
               <tbody className="divide-y divide-slate-100">
                 {appointments.map(apt => (
                   <tr key={apt.id} className="hover:bg-slate-50 transition">
-                    <td className="px-6 py-4 font-mono font-bold text-teal-600">{apt.id}</td>
+                    <td className="px-6 py-4">
+                      <span className="px-3 py-1 bg-slate-100 text-slate-700 rounded-lg font-mono text-sm font-bold border border-slate-200 shadow-sm">
+                        {apt.id}
+                      </span>
+                    </td>
                     <td className="px-6 py-4">
                       <p className="font-bold text-slate-800">{apt.patientName || (apt.patient ? apt.patient.fullName : 'N/A')}</p>
                       <p className="text-xs font-semibold text-slate-400">{apt.phone}</p>
                     </td>
                     <td className="px-6 py-4">
-                      <p className="font-bold text-slate-800">{apt.doctor?.name || 'N/A'}</p>
+                      <p className="font-bold text-slate-800">
+                        {apt.doctor?.name || 'N/A'} 
+                        {apt.doctor?.id && (
+                          <span className="ml-2 px-2 py-0.5 bg-slate-100 text-slate-600 rounded text-xs font-mono border border-slate-200">
+                            {formatDoctorId(apt.doctor.id)}
+                          </span>
+                        )}
+                      </p>
                     </td>
                     <td className="px-6 py-4">
                       <p className="font-bold text-slate-800">{apt.date}</p>

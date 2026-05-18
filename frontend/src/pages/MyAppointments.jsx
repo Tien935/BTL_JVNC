@@ -12,8 +12,14 @@ const MyAppointments = () => {
   const fetchAppointments = async () => {
     setLoading(true);
     try {
-      // In a real app, you would pass the logged in user ID to filter
-      const response = await fetch("http://localhost:8081/api/appointments");
+      const userStr = localStorage.getItem("user");
+      if (!userStr) {
+        setAppointments([]);
+        setLoading(false);
+        return;
+      }
+      const user = JSON.parse(userStr);
+      const response = await fetch(`http://localhost:8081/api/appointments/patient/${user.id}`);
       if (response.ok) {
         const data = await response.json();
         // The backend returns an array of Appointment objects
@@ -188,10 +194,7 @@ const MyAppointments = () => {
             <option>Chờ xác nhận</option>
             <option>Đã khám</option>
           </select>
-          <button className="p-3 rounded-2xl bg-teal-600 text-white hover:bg-teal-700 transition shadow-lg shadow-teal-100 flex items-center justify-center">
-            <i className="fas fa-download mr-2"></i>{" "}
-            <span className="hidden sm:inline">Xuất file</span>
-          </button>
+
         </div>
       </div>
 
@@ -255,27 +258,27 @@ const MyAppointments = () => {
                       {(apt.rawStatus === "PENDING" ||
                         apt.rawStatus === "Chờ xác nhận" ||
                         apt.rawStatus === "CONFIRMED") && (
-                        <button
-                          onClick={() => handleCancel(apt.id, apt.rawStatus)}
-                          className="w-10 h-10 rounded-xl bg-red-50 text-red-400 hover:bg-red-100 hover:text-red-600 transition"
-                          title={
-                            apt.rawStatus === "CONFIRMED"
-                              ? "Yêu cầu hủy"
-                              : "Hủy lịch"
-                          }
-                        >
-                          <i className="fas fa-times"></i>
-                        </button>
-                      )}
+                          <button
+                            onClick={() => handleCancel(apt.id, apt.rawStatus)}
+                            className="w-10 h-10 rounded-xl bg-red-50 text-red-400 hover:bg-red-100 hover:text-red-600 transition"
+                            title={
+                              apt.rawStatus === "CONFIRMED"
+                                ? "Yêu cầu hủy"
+                                : "Hủy lịch"
+                            }
+                          >
+                            <i className="fas fa-times"></i>
+                          </button>
+                        )}
                       {(apt.rawStatus === "COMPLETED" ||
                         apt.rawStatus === "Đã khám") && (
-                        <button
-                          onClick={() => handleViewRecord(apt.id)}
-                          className="px-4 py-2 rounded-xl bg-teal-50 text-teal-600 hover:bg-teal-600 hover:text-white transition font-bold text-xs uppercase tracking-wider"
-                        >
-                          Kết quả
-                        </button>
-                      )}
+                          <button
+                            onClick={() => handleViewRecord(apt.id)}
+                            className="px-4 py-2 rounded-xl bg-teal-50 text-teal-600 hover:bg-teal-600 hover:text-white transition font-bold text-xs uppercase tracking-wider"
+                          >
+                            Kết quả
+                          </button>
+                        )}
                     </td>
                   </tr>
                 ))

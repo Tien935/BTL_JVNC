@@ -110,6 +110,9 @@ const BookingWizard = () => {
                 const savedApt = await response.json();
                 updateData('appointmentId', savedApt.id);
                 setStep(5); // Success step
+              } else if (response.status === 409) {
+                const errorData = await response.json();
+                alert(errorData.error || "Bác sĩ đã có lịch hẹn vào thời gian này. Vui lòng chọn thời gian khác.");
               } else {
                 alert("Đã xảy ra lỗi khi đặt lịch. Vui lòng thử lại.");
               }
