@@ -15,6 +15,8 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import java.util.List;
 import java.util.Random;
+import java.time.LocalDate;
+import java.util.stream.Collectors;
 
 @Path("/appointments")
 @Produces(MediaType.APPLICATION_JSON)
@@ -35,6 +37,23 @@ public class AppointmentResource {
     @Path("/patient/{patientId}")
     public List<Appointment> getByPatientId(@PathParam("patientId") Long patientId) {
         return Appointment.list("patient.id = ?1 order by date desc, time desc", patientId);
+    }
+
+    @GET
+    @Path("/doctor/{doctorId}/date/{date}/booked-times")
+    public List<String> getBookedTimes(@PathParam("doctorId") Long doctorId, @PathParam("date") String dateString) {
+        LocalDate localDate = LocalDate.parse(dateString);
+        List<Appointment> appointments = Appointment.list(
+            "doctor.id = ?1 and date = ?2 and status != 'Đã hủy' and status != 'CANCELLED' and status != 'CANCEL_REQUESTED'", 
+            doctorId, localDate
+        );
+        return appointments.stream()
+                .map(a -> {
+                    String timeStr = a.time.toString();
+                    // LocalTime toString() format is "HH:mm" or "HH:mm:ss"
+                    return timeStr.length() > 5 ? timeStr.substring(0, 5) : timeStr;
+                })
+                .collect(Collectors.toList());
     }
 
     @POST

@@ -65,6 +65,7 @@ const BookingWizard = () => {
         />;
       case 3:
         return <DateTimeStep 
+          doctorId={bookingData.doctor?.id}
           onSelect={(date, time) => {
             updateData('date', date);
             updateData('time', time);
